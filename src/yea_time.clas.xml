@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>YEA_TIME</CLSNAME>
+    <LANGU>N</LANGU>
+    <DESCRIPT>Class for handling time calculations</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ABAPDATE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Datum</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ABAPTIME</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Tijd</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ADD_DAYS</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Add days to this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ADD_HOURS</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Add hours to this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ADD_MINUTES</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Add minutes to this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>ADD_SECONDS</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Add seconds to this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>COPY</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Returns a copy of this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>DB_TTZZ</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Gegenereerde tabel bij een view</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>FROM_ABAP</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Takes ABAP date and time arguments</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>FROM_UNIX</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Takes a millisecond unix timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>GET_DATE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Returns the ABAP date of this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>GET_DELTA</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Get the delta in seconds of the timezone (as int4)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>GET_TIME</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Returns the ABAP time of this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>GET_UNIX</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Returns the unix timestamp value (packed)</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>GET_ZONE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Get the timezone of this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>NOW</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Returns a timestamp set to now</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>SET_TIMEZONE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Set the timezone of this timestamp</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>TIMEZONE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>ABAP-systeemveld: tijdzone van huidige gebruiker</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME</CLSNAME>
+     <CMPNAME>WEEKDAY</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Natuurlijk getal</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
