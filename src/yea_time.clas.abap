@@ -17,18 +17,30 @@ public section.
       !TIMEZONE type SYST_ZONLO
     returning
       value(RETURNING) type ref to YEA_TIME .
-  class-methods NOW
+  class-methods FROM_NOW
     importing
       !TIMEZONE type SYST_ZONLO default SY-ZONLO
     returning
       value(RETURNING) type ref to YEA_TIME .
-  methods GET_UNIX
+  class-methods FROM_TIMESTAMP
+    importing
+      !TIMESTAMP type TIMESTAMP
+      !TIMEZONE type SY-ZONLO
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  class-methods FROM_TIMESTAMPL
+    importing
+      !TIMESTAMP type TIMESTAMPL
+      !TIMEZONE type SY-ZONLO
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods UNIX
     returning
       value(RETURNING) type YEA_TS .
-  methods GET_DATE
+  methods DATE
     returning
       value(RETURNING) type DATUM .
-  methods GET_TIME
+  methods TIME
     returning
       value(RETURNING) type UZEIT .
   methods SET_TIMEZONE
@@ -46,10 +58,13 @@ public section.
   methods ADD_DAYS
     importing
       !DAYS type INT4 .
-  methods GET_ZONE
+  methods TZ
     returning
       value(RETURNING) type SYST_ZONLO .
-  methods GET_DELTA
+  methods DELTA
+    returning
+      value(RETURNING) type INT4 .
+  methods DISTANCE
     returning
       value(RETURNING) type INT4 .
   methods COPY
@@ -80,30 +95,36 @@ public section.
       !OTHER_TIME type ref to YEA_TIME
     returning
       value(RETURNING) type BOOLEAN .
-  methods GET_DAY
+  methods DAY
     returning
       value(RETURNING) type INT4 .
-  methods GET_MONTH
+  methods WEEK
     returning
       value(RETURNING) type INT4 .
-  methods GET_YEAR
+  methods MONTH
     returning
       value(RETURNING) type INT4 .
-  methods GET_HOUR
+  methods YEAR
     returning
       value(RETURNING) type INT4 .
-  methods GET_MINUTE
+  methods HOUR
     returning
       value(RETURNING) type INT4 .
-  methods GET_SECOND
+  methods MINUTE
     returning
       value(RETURNING) type INT4 .
-  methods GET_DAY_STRING
+  methods SECOND
+    returning
+      value(RETURNING) type INT4 .
+  methods WEEKDAY
+    returning
+      value(RETURNING) type INT4 .
+  methods DAY_STRING
     importing
       !LANG type SY-LANGU default SY-LANGU
     returning
       value(RETURNING) type STRING .
-  methods GET_MONTH_STRING
+  methods MONTH_STRING
     importing
       !LANG type SY-LANGU default SY-LANGU
     returning
@@ -111,6 +132,30 @@ public section.
   methods ISO
     returning
       value(RETURNING) type STRING .
+  methods START_OF_DAY
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods END_OF_DAY
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods START_OF_WEEK
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods END_OF_WEEK
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods START_OF_MONTH
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods END_OF_MONTH
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods START_OF_YEAR
+    returning
+      value(RETURNING) type ref to YEA_TIME .
+  methods END_OF_YEAR
+    returning
+      value(RETURNING) type ref to YEA_TIME .
 protected section.
 private section.
 
@@ -119,7 +164,6 @@ private section.
   data ABAPDATE type DATUM .
   data ABAPTIME type UZEIT .
   data DB_TTZZ type YEA_TTZZ .
-  data WEEKDAY type INT4 .
 
   methods ADJUST_ABAP_DATETIME .
 ENDCLASS.
@@ -179,8 +223,93 @@ CLASS YEA_TIME IMPLEMENTATION.
     new_time->abapdate = me->abapdate.
     new_time->abaptime = me->abaptime.
     new_time->db_ttzz = me->db_ttzz.
-    new_time->weekday = me->weekday.
     returning = new_time.
+  endmethod.
+
+
+  method DATE.
+    returning = me->abapdate.
+  endmethod.
+
+
+  method DAY.
+    returning = abapdate+6(2).
+  endmethod.
+
+
+  method DAY_STRING.
+    data long type t246-langt.
+    data short type t246-kurzt.
+    data outlang type sy-langu.
+    call function 'GET_WEEKDAY_NAME'
+      exporting date = me->abapdate
+                language = lang
+      importing langu_back = outlang
+                longtext = long
+                shorttext = short
+     exceptions others = 1.
+    returning = long.
+  endmethod.
+
+
+  method DELTA.
+    returning = me->db_ttzz-delta.
+    if ( me->db_ttzz-delta = '-' ).
+      returning = 0 - returning.
+    endif.
+  endmethod.
+
+
+  method DISTANCE.
+  endmethod.
+
+
+  method END_OF_DAY.
+    returning = from_abap(
+      date = abapdate
+      time = '235959'
+      timezone = timezone
+    ).
+  endmethod.
+
+
+  method END_OF_MONTH.
+    data(month_date) = me->abapdate.
+    " Increase month by 1
+    month_date+4(2) = me->month( ) + 1.
+    " And set the day to the first month of the next month
+    month_date+6(2) = 1.
+
+    month_date = month_date - 1.
+    returning = yea_time=>from_abap(
+      date = month_date
+      time = '235959'
+      timezone = me->timezone
+    ).
+  endmethod.
+
+
+  method END_OF_WEEK.
+    data abapdate type scal-date.
+    call function 'WEEK_GET_FIRST_DAY'
+      exporting week = conv scal-week( me->week( ) )
+      importing date = abapdate.
+    abapdate = abapdate + 6.
+    returning = yea_time=>from_abap(
+      date = abapdate
+      time = '235959'
+      timezone = me->timezone
+    ).
+  endmethod.
+
+
+  method END_OF_YEAR.
+    data(month_date) = conv datum( |{ me->year( ) }{ 12 }{ 31 } | ).
+    returning = yea_time=>from_abap(
+      date = month_date
+      time = '235959'
+      timezone = me->timezone
+    ).
   endmethod.
 
 
@@ -219,97 +348,40 @@ CLASS YEA_TIME IMPLEMENTATION.
   endmethod.
 
 
+  method FROM_NOW.
+    returning = yea_time=>from_abap(
+      date = sy-datum
+      time = sy-uzeit
+      timezone = timezone
+    ).
+  endmethod.
+
+
+  method from_timestamp.
+    convert time stamp timestamp time zone timezone into date data(new_abapdate) time data(new_abaptime).
+    returning = yea_time=>from_abap(
+      date = new_abapdate
+      time = new_abaptime
+      timezone = timezone
+    ).
+  endmethod.
+
+
+  method FROM_TIMESTAMPL.
+    convert time stamp timestamp time zone timezone into date data(new_abapdate) time data(new_abaptime).
+    returning = yea_time=>from_abap(
+      date = new_abapdate
+      time = new_abaptime
+      timezone = timezone
+    ).
+  endmethod.
+
+
   method FROM_UNIX.
     data(new_time) = new yea_time( ).
     new_time->unixtime = timestamp.
     new_time->set_timezone( 'UTC' ).
     returning = new_time.
-  endmethod.
-
-
-  method GET_DATE.
-    returning = me->abapdate.
-  endmethod.
-
-
-  method GET_DAY.
-    returning = abapdate+6(2).
-  endmethod.
-
-
-  method GET_DAY_STRING.
-    data long type t246-langt.
-    data short type t246-kurzt.
-    data outlang type sy-langu.
-    call function 'GET_WEEKDAY_NAME'
-      exporting date = me->abapdate
-                language = lang
-      importing langu_back = outlang
-                longtext = long
-                shorttext = short
-     exceptions others = 1.
-    returning = long.
-  endmethod.
-
-
-  method GET_DELTA.
-    returning = me->db_ttzz-delta.
-    if ( me->db_ttzz-delta = '-' ).
-      returning = 0 - returning.
-    endif.
-  endmethod.
-
-
-  method GET_HOUR.
-    returning = me->abaptime+0(2).
-  endmethod.
-
-
-  method GET_MINUTE.
-    returning = me->abaptime+2(2).
-  endmethod.
-
-
-  method GET_MONTH.
-    returning = abapdate+4(2).
-  endmethod.
-
-
-  method GET_MONTH_STRING.
-    data(month_num) = me->get_month( ).
-    select single ltx from t247 into returning
-      where spras = lang
-        and mnr = month_num.
-    if ( sy-subrc <> 0 and lang <> sy-langu ).
-      select single ltx from t247 into returning
-        where spras = sy-langu
-          and mnr = month_num.
-    endif.
-  endmethod.
-
-
-  method GET_SECOND.
-    returning = me->abaptime+4(2).
-  endmethod.
-
-
-  method GET_TIME.
-    returning = me->abaptime.
-  endmethod.
-
-
-  method GET_UNIX.
-    returning = me->unixtime.
-  endmethod.
-
-
-  method GET_YEAR.
-    returning = abapdate+0(4).
-  endmethod.
-
-
-  method GET_ZONE.
-    returning = me->db_ttzz-tzone.
   endmethod.
 
 
@@ -339,6 +411,11 @@ CLASS YEA_TIME IMPLEMENTATION.
   endmethod.
 
 
+  method HOUR.
+    returning = me->abaptime+0(2).
+  endmethod.
+
+
   method ISO.
     data:
       monthnum(2) type n,
@@ -346,12 +423,12 @@ CLASS YEA_TIME IMPLEMENTATION.
       hournum(2) type n,
       minutenum(2) type n,
       secondnum(2) type n.
-    monthnum = me->get_month( ).
-    daynum = me->get_day( ).
-    hournum = me->get_hour( ).
-    minutenum = me->get_minute( ).
-    secondnum = me->get_second( ).
-    returning = |{ me->get_year( ) }-{ monthnum }-{ daynum }T{ hournum }:{ minutenum }:{ secondnum }{ db_ttzz-direction }{ db_ttzz-delta+0(2) }:{ db_ttzz-delta+2(2) }|.
+    monthnum = me->month( ).
+    daynum = me->day( ).
+    hournum = me->hour( ).
+    minutenum = me->minute( ).
+    secondnum = me->second( ).
+    returning = |{ me->year( ) }-{ monthnum }-{ daynum }T{ hournum }:{ minutenum }:{ secondnum }{ db_ttzz-direction }{ db_ttzz-delta+0(2) }:{ db_ttzz-delta+2(2) }|.
   endmethod.
 
 
@@ -381,12 +458,31 @@ CLASS YEA_TIME IMPLEMENTATION.
   endmethod.
 
 
-  method NOW.
-    returning = yea_time=>from_abap(
-      date = sy-datum
-      time = sy-uzeit
-      timezone = timezone
-    ).
+  method MINUTE.
+    returning = me->abaptime+2(2).
+  endmethod.
+
+
+  method MONTH.
+    returning = abapdate+4(2).
+  endmethod.
+
+
+  method MONTH_STRING.
+    data(month_num) = me->month( ).
+    select single ltx from t247 into returning
+      where spras = lang
+        and mnr = month_num.
+    if ( sy-subrc <> 0 and lang <> sy-langu ).
+      select single ltx from t247 into returning
+        where spras = sy-langu
+          and mnr = month_num.
+    endif.
+  endmethod.
+
+
+  method SECOND.
+    returning = me->abaptime+4(2).
   endmethod.
 
 
@@ -396,5 +492,88 @@ CLASS YEA_TIME IMPLEMENTATION.
       me->timezone = timezone.
     endif.
     me->adjust_abap_datetime( ).
+  endmethod.
+
+
+  method START_OF_DAY.
+    returning = from_abap(
+      date = abapdate
+      time = '000000'
+      timezone = timezone
+    ).
+  endmethod.
+
+
+  method start_of_month.
+    data(month_date) = me->abapdate.
+    month_date+6(2) = 01.
+    returning = yea_time=>from_abap(
+      date = month_date
+      time = '000000'
+      timezone = me->timezone
+    ).
+  endmethod.
+
+
+  method start_of_week.
+    data abapdate type scal-date.
+    call function 'WEEK_GET_FIRST_DAY'
+      exporting week = conv scal-week( me->week( ) )
+      importing date = abapdate.
+    returning = yea_time=>from_abap(
+      date = abapdate
+      time = '000000'
+      timezone = me->timezone
+    ).
+  endmethod.
+
+
+  method START_OF_YEAR.
+    data(month_date) = me->abapdate. " conv datum( |{ me->year( ) }{ 01 }{ 01 }| ).
+    month_date+4(2) = 01.
+    month_date+6(2) = 01.
+    returning = yea_time=>from_abap(
+      date = month_date
+      time = '000000'
+      timezone = me->timezone
+    ).
+  endmethod.
+
+
+  method TIME.
+    returning = me->abaptime.
+  endmethod.
+
+
+  method TZ.
+    returning = me->db_ttzz-tzone.
+  endmethod.
+
+
+  method UNIX.
+    returning = me->unixtime.
+  endmethod.
+
+
+  method WEEK.
+    data scal_week type scal-week.
+    call function 'DATE_GET_WEEK'
+      exporting date = conv scal-date( me->abapdate )
+      importing week = scal_week.
+    returning = scal_week.
+  endmethod.
+
+
+  method WEEKDAY.
+    data packed type p.
+    call function 'DAY_IN_WEEK'
+      exporting datum = me->abapdate
+      importing wotnr = packed.
+    returning = packed.
+  endmethod.
+
+
+  method YEAR.
+    returning = abapdate+0(4).
   endmethod.
 ENDCLASS.

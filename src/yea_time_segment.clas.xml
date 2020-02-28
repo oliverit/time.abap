@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+    <LANGU>N</LANGU>
+    <DESCRIPT>A line with two points</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+     <CMPNAME>END</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Class for handling time calculations</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+     <CMPNAME>FROM</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>A line starting from FROM and stopping at now</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+     <CMPNAME>RANGE</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>A line with a start and end time</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+     <CMPNAME>START</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>Class for handling time calculations</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>YEA_TIME_SEGMENT</CLSNAME>
+     <CMPNAME>TO</CMPNAME>
+     <LANGU>N</LANGU>
+     <DESCRIPT>A line starting from now and stopping at TO</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
